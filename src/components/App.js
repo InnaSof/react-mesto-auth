@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
 
 import api from '../utils/api';
@@ -28,8 +28,11 @@ function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState('');
-  const [requestStatus, setRequestStatus] = useState(false);
   const [isInfoTooltipPopupOpen, setInfoTooltipPopupOpen] = useState(false);
+  const [requestStatus, setRequestStatus] = useState({
+    status: false,
+    title: '',
+  });
 
   const history = useHistory();
 
@@ -44,22 +47,24 @@ function App() {
   }, [loggedIn]);
 
   useEffect(() => {
-    Promise.all([api.getProfileInfo(), api.getInitialCards()])
-      .then(([user, cards]) => {
-        setCurrentUser(user);
-        setCards(cards);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+    if (loggedIn) {
+      Promise.all([api.getProfileInfo(), api.getInitialCards()])
+        .then(([user, cards]) => {
+          setCurrentUser(user);
+          setCards(cards);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [loggedIn]);
 
   function tokenCheck() {
     const token = localStorage.getItem('token');
     if (token) {
       auth.checkToken(token)
         .then((res) => {
-          setEmail(res.email)
+          setEmail(res.data.email)
           setLoggedIn(true);
           history.push('/');
         })
@@ -73,12 +78,18 @@ function App() {
     auth.register(email, password)
     .then((res) => {
       if (res) {
-        setRequestStatus(true);
+        setRequestStatus({
+          status: true,
+          title: 'Вы успешно зарегистрировались!',
+        });
         history.push('/signin');
       }
     })
     .catch((err) => {
-      setRequestStatus(false);
+      setRequestStatus({
+        status: false,
+        title: 'Что-то пошло не так! Попробуйте ещё раз.',
+      });
       console.log(err);
     })
     .finally(() => {
@@ -95,7 +106,10 @@ function handleLogin({ email, password }) {
       history.push('/');
     })
     .catch((err) => {
-      setRequestStatus(false);
+      setRequestStatus({
+        status: false,
+        title: 'Что-то пошло не так! Попробуйте ещё раз.',
+      });
       setInfoTooltipPopupOpen(true);
       console.log(err);
     })
@@ -227,7 +241,7 @@ function handleSignOut() {
           <Route path='/signin'>
             <Login onLogin={handleLogin} />
           </Route> 
-          <Route >
+          <Route path='*'>
             {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
           </Route>
         </Switch>
@@ -237,7 +251,8 @@ function handleSignOut() {
         <InfoTooltip
           isOpen={isInfoTooltipPopupOpen} 
           onClose={closeAllPopups} 
-          signupState={requestStatus} 
+          signupState={requestStatus.status}
+          statusText={requestStatus.title}
         />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}

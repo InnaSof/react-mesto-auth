@@ -2,9 +2,9 @@ import React from "react";
 import imageSuccess from '../images/reg-success.svg';
 import imageFail from '../images/reg-fail.svg';
 
-function InfoTooltip({ isOpen, onClose, signupState }) {
+function InfoTooltip({ isOpen, onClose, signupState, statusText }) {
   return (
-    <section className={`popup popup_type_info-tooltip ${isOpen ? 'popup_opened' : ''}`}>
+    <section className={`popup popup_type_info-tooltip ${isOpen && 'popup_opened'}`}>
       <div className="popup__container">
         <button
           type="button"
@@ -18,7 +18,7 @@ function InfoTooltip({ isOpen, onClose, signupState }) {
           alt="Статус регистрации"
         />
         <p className="popup__text-login">
-          {signupState ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
+          {statusText}
         </p>
       </div>
     </section>

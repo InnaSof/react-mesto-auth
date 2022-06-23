@@ -3,7 +3,7 @@ import React from 'react';
 function ImagePopup({ card, onClose, name }) {
 
   return (
-    <div className={`popup popup_type_${name} ${card.link ? 'popup_opened' : ''}`}>
+    <div className={`popup popup_type_${name} ${card.link && 'popup_opened'}`}>
       <div className="popup__image-card">
         <button
           type="button"

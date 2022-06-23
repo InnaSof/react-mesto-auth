@@ -27,10 +27,10 @@ function Register({ onRegister }) {
         noValidate="" 
       >
         <input
+          value={email} 
           className="auth__input"
           type="email"
           placeholder="Email"
-          value={email} 
           onChange={handleEmailChange}
           name="email"
           id="email-input"
@@ -39,10 +39,10 @@ function Register({ onRegister }) {
           maxLength={40}
         />
         <input
+          value={password} 
           className="auth__input"
           type="password"
           placeholder="Пароль"
-          value={password} 
           onChange={handlePasswordChange} 
           name="password"
           id="password-input"

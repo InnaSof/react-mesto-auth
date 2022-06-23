@@ -26,6 +26,7 @@ function Login({ onLogin }) {
       <h2 className="auth__title">Вход</h2>
       <form className="auth__form" onSubmit={handleSubmit}>
         <input
+          value={email}
           className="auth__input" 
           type="email" 
           placeholder="Email" 
@@ -33,6 +34,7 @@ function Login({ onLogin }) {
           required
         />
         <input 
+          value={password}
           className="auth__input"
           type="password" 
           placeholder="Пароль" 
