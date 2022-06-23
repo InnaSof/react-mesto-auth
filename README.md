@@ -4,7 +4,7 @@
 
 *******
 
-Ссылка на Pages:
+Ссылка на Pages: https://innasof.github.io/react-mesto-auth
 
 *****
 #### Функциональность проекта:
